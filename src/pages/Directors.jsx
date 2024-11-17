@@ -1,16 +1,37 @@
 import { useEffect, useState } from "react";
-
+import NavBar from "../components/NavBar";
 function Directors() {
+  const [directors, setDirectors] = useState([]);
+  useEffect(() => {
+    fetch("http://localhost:4000/directors")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setDirectors(data);
+      })
+      .catch((error) => console.error("Fetch error:", error));
+  }, []);
+
   return (
     <>
-      <header>
-        {/* What component should go here? */}
-      </header>
+      <header>{<NavBar />}</header>
+      <h1>Directors Page</h1>
       <main>
-        {/* Director info here! */}
+        {directors.map((director, index) => {
+          return (
+            <article key={index}>
+              <h2>{director.name} </h2>
+              <ul>
+                {director.movies.map((movie, index) => (
+                  <li key={index}>{movie}</li>
+                ))}
+              </ul>
+            </article>
+          );
+        })}
       </main>
     </>
   );
-};
+}
 
 export default Directors;
